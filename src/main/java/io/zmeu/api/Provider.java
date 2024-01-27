@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.pf4j.demo.api;
+package io.zmeu.api;
 
 import org.pf4j.ExtensionPoint;
 
 /**
  * @author Decebal Suiu
  */
-public interface Greeting extends ExtensionPoint {
+public interface Provider extends ExtensionPoint {
 
-    String getGreeting();
+    Resources getResources();
+
 
 }
