@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum Type {
-    String("String"), Number("Number"), Boolean("Boolean");
+    String("string"), Number("number"), Boolean("boolean");
     private final String value;
 
     Type(String value) {
