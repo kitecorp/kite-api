@@ -75,7 +75,7 @@ public abstract class Provider<T> implements IProvider<T> {
     }
 
     public String schemaName() {
-        return resource.getClass().getAnnotation(io.zmeu.api.annotations.Schema.class).typeName();
+        return resource.getClass().getAnnotation(io.zmeu.api.annotations.TypeName.class).value();
     }
 
 }

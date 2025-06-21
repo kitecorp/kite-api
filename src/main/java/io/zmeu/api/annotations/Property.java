@@ -1,6 +1,5 @@
 package io.zmeu.api.annotations;
 
-import io.zmeu.api.schema.Type;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,8 +11,6 @@ import java.lang.annotation.Target;
 public @interface Property {
     String name() default "";
 
-    Type type();
-
     String description() default "";
 
     String deprecationMessage() default "";
@@ -21,8 +18,6 @@ public @interface Property {
     boolean optional() default true;
 
     boolean immutable() default false;
-
-    boolean recreateOnChange() default false;
 
     boolean hidden() default false;
 

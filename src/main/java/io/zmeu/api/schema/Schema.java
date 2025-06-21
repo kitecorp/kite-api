@@ -37,27 +37,28 @@ public class Schema {
             } else {
                 properties.append("\tvar ");
             }
-            properties.append(property.type().getValue());
+            var typename = field.getType().getSimpleName().toLowerCase();
+            properties.append(typename);
             properties.append(" ");
             properties.append(name);
             properties.append("\n");
         }
         properties.append("} \n");
 
-        var annotation = resource.getClass().getAnnotation(io.zmeu.api.annotations.Schema.class);
-        return "schema %s%s".formatted(annotation.typeName(), properties);
+        var annotation = resource.getClass().getAnnotation(io.zmeu.api.annotations.TypeName.class);
+        return "schema %s%s".formatted(annotation.value(), properties);
     }
 
     @SneakyThrows
     public static Schema toSchema(Object resource) {
         Objects.requireNonNull(resource);
         var builder = Schema.builder();
-        var schemaDefinition = resource.getClass().getAnnotation(io.zmeu.api.annotations.Schema.class);
+        var schemaDefinition = resource.getClass().getAnnotation(io.zmeu.api.annotations.TypeName.class);
         if (schemaDefinition == null) {
             throw new RuntimeException("@SchemaDefinition annotation not found on class: "+resource.getClass().getName());
         }
 
-        builder.name(schemaDefinition.typeName());
+        builder.name(schemaDefinition.value());
         builder.properties(new LinkedHashSet<>());
         builder.resourceClass(resource.getClass());
 
@@ -67,7 +68,7 @@ public class Schema {
             var property = Property.builder();
 
             property.required(propertySchema.optional());
-            property.type(propertySchema.type());
+            property.type(field.getType().getSimpleName().toLowerCase());
 
 
             property.immutable(propertySchema.immutable());
