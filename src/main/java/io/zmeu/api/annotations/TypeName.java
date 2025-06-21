@@ -7,11 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Schema {
-    String description();
-
-    String uri() default "";
-
-    String version() default "0.0.1";
-
+public @interface TypeName {
+    String value();
 }

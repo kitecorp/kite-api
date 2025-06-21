@@ -1,12 +1,11 @@
 package io.zmeu.api.resource;
 
-import io.zmeu.api.schema.Type;
 import lombok.Builder;
 
 @Builder
 public record Property(
         String name,
-        Type type,
+        Object type,
         Object value,
         Object defaultVal,
         String description,
