@@ -1,5 +1,6 @@
 package io.zmeu.api.schema;
 
+import io.zmeu.api.annotations.TypeName;
 import io.zmeu.api.resource.Property;
 import lombok.Builder;
 import lombok.Data;
@@ -84,4 +85,11 @@ public class Schema {
 
         return builder.build();
     }
+
+    public static String schemaName(Object resource) {
+        Class<?> aClass = resource.getClass();
+        if (aClass.isAnnotationPresent(TypeName.class)) return aClass.getAnnotation(TypeName.class).value();
+        else return aClass.getSimpleName();
+    }
+
 }
