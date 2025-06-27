@@ -27,8 +27,8 @@ public class Schema {
 
     private Set<Property> properties;
 
-    public static String toString(Object resource) {
-        var fields = resource.getClass().getDeclaredFields();
+    public static String toString(Class<?> resource) {
+        var fields = resource.getDeclaredFields();
         var properties = new StringBuilder(" { \n");
         for (Field field : fields) {
             var property = field.getAnnotation(io.zmeu.api.annotations.Property.class);
@@ -46,31 +46,30 @@ public class Schema {
         }
         properties.append("} \n");
 
-        var annotation = resource.getClass().getAnnotation(io.zmeu.api.annotations.TypeName.class);
+        var annotation = resource.getAnnotation(io.zmeu.api.annotations.TypeName.class);
         return "schema %s%s".formatted(annotation.value(), properties);
     }
 
     @SneakyThrows
-    public static Schema toSchema(Object resource) {
+    public static Schema toSchema(Class<?> resource) {
         Objects.requireNonNull(resource);
         var builder = Schema.builder();
-        var schemaDefinition = resource.getClass().getAnnotation(io.zmeu.api.annotations.TypeName.class);
+        var schemaDefinition = resource.getAnnotation(io.zmeu.api.annotations.TypeName.class);
         if (schemaDefinition == null) {
-            throw new RuntimeException("@SchemaDefinition annotation not found on class: "+resource.getClass().getName());
+            throw new RuntimeException("@SchemaDefinition annotation not found on class: "+resource.getName());
         }
 
         builder.name(schemaDefinition.value());
         builder.properties(new LinkedHashSet<>());
-        builder.resourceClass(resource.getClass());
+        builder.resourceClass(resource);
 
-        var fields = resource.getClass().getDeclaredFields();
+        var fields = resource.getDeclaredFields();
         for (Field field : fields) {
             var propertySchema = field.getAnnotation(io.zmeu.api.annotations.Property.class);
             var property = Property.builder();
 
             property.required(propertySchema.optional());
             property.type(field.getType().getSimpleName().toLowerCase());
-
 
             property.immutable(propertySchema.immutable());
             property.description(propertySchema.description());
