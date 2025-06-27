@@ -20,6 +20,8 @@ import io.zmeu.api.schema.Schema;
 import lombok.Getter;
 import org.pf4j.Extension;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -29,19 +31,14 @@ import java.util.Set;
 public abstract class Provider<T> implements IProvider<T> {
     private final Map<String, Class<?>> schemaMap = new HashMap<>();
     @Getter
-    private final T resource;
+    private final Class<T> resource;
 
     private final Set<String> immutableProperties = new HashSet<>();
 
     public Provider() {
-        this.resource = initResource();
+        this.resource = (Class<T>) resolveGenericParameter(getClass());
         schemasMap();
     }
-
-    /**
-     * Use this method to create an instance of your resource
-     */
-    protected abstract T initResource();
 
     public Schema schema() {
         return Schema.toSchema(resource);
@@ -78,4 +75,19 @@ public abstract class Provider<T> implements IProvider<T> {
         return Schema.schemaName(resource);
     }
 
+
+    private Class<?> resolveGenericParameter(Class<?> clazz) {
+        while (clazz != null) {
+            Type type = clazz.getGenericSuperclass();
+            if (type instanceof ParameterizedType pType) {
+                if (pType.getRawType().equals(Provider.class)) {
+                    Type actualType = pType.getActualTypeArguments()[0];
+                    if (actualType instanceof Class<?> c) return c;
+                    if (actualType instanceof ParameterizedType pt) return (Class<?>) pt.getRawType();
+                }
+            }
+            clazz = clazz.getSuperclass();
+        }
+        throw new IllegalStateException("Could not resolve generic parameter for Provider<T>");
+    }
 }
