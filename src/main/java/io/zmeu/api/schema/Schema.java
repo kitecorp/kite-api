@@ -85,10 +85,9 @@ public class Schema {
         return builder.build();
     }
 
-    public static String schemaName(Object resource) {
-        Class<?> aClass = resource.getClass();
-        if (aClass.isAnnotationPresent(TypeName.class)) return aClass.getAnnotation(TypeName.class).value();
-        else return aClass.getSimpleName();
+    public static String schemaName(Class<?> resourceClass) {
+        if (resourceClass.isAnnotationPresent(TypeName.class)) return resourceClass.getAnnotation(TypeName.class).value();
+        else return resourceClass.getSimpleName();
     }
 
 }
