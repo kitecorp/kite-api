@@ -33,11 +33,7 @@ public class Schema {
         for (Field field : fields) {
             var property = field.getAnnotation(io.zmeu.api.annotations.Property.class);
             var name = property.name().isBlank() ? field.getName() : property.name();
-            if (property.immutable()) {
-                properties.append("\tval ");
-            } else {
-                properties.append("\tvar ");
-            }
+            properties.append("\t");
             var typename = field.getType().getSimpleName().toLowerCase();
             properties.append(typename);
             properties.append(" ");
