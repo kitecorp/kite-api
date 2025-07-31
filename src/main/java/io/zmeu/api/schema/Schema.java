@@ -67,7 +67,8 @@ public class Schema {
             property.required(propertySchema.optional());
             property.type(field.getType().getSimpleName().toLowerCase());
 
-            property.immutable(propertySchema.immutable());
+            property.cloud(propertySchema.cloud());
+            property.importable(propertySchema.importable());
             property.description(propertySchema.description());
 
             String name = propertySchema.name().isBlank() ? field.getName() : propertySchema.name();

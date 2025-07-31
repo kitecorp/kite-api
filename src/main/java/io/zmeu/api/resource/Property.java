@@ -11,7 +11,8 @@ public record Property(
         String description,
         String deprecationMessage,
         boolean required,
-        boolean immutable,
+        boolean cloud,
+        boolean importable,
         boolean hidden) {
 
     public Object getValue() {
