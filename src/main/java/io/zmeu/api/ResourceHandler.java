@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.zmeu.api;
+package io.kite.api;
 
-import io.zmeu.api.resource.Property;
-import io.zmeu.api.schema.Schema;
+import io.kite.api.resource.Property;
+import io.kite.api.schema.Schema;
 import lombok.Getter;
 import org.pf4j.Extension;
 

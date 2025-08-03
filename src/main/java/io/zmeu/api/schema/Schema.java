@@ -1,7 +1,7 @@
-package io.zmeu.api.schema;
+package io.kite.api.schema;
 
-import io.zmeu.api.annotations.TypeName;
-import io.zmeu.api.resource.Property;
+import io.kite.api.annotations.TypeName;
+import io.kite.api.resource.Property;
 import lombok.Builder;
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -31,7 +31,7 @@ public class Schema {
         var fields = resource.getDeclaredFields();
         var properties = new StringBuilder(" { \n");
         for (Field field : fields) {
-            var property = field.getAnnotation(io.zmeu.api.annotations.Property.class);
+            var property = field.getAnnotation(io.kite.api.annotations.Property.class);
             var name = property.name().isBlank() ? field.getName() : property.name();
             if (property.cloud()) {
                 properties.append("\t@cloud ");
@@ -48,7 +48,7 @@ public class Schema {
         }
         properties.append("} \n");
 
-        var annotation = resource.getAnnotation(io.zmeu.api.annotations.TypeName.class);
+        var annotation = resource.getAnnotation(io.kite.api.annotations.TypeName.class);
         return "schema %s%s".formatted(annotation.value(), properties);
     }
 
@@ -56,7 +56,7 @@ public class Schema {
     public static Schema toSchema(Class<?> resource) {
         Objects.requireNonNull(resource);
         var builder = Schema.builder();
-        var schemaDefinition = resource.getAnnotation(io.zmeu.api.annotations.TypeName.class);
+        var schemaDefinition = resource.getAnnotation(io.kite.api.annotations.TypeName.class);
         if (schemaDefinition == null) {
             throw new RuntimeException("@SchemaDefinition annotation not found on class: "+resource.getName());
         }
@@ -67,7 +67,7 @@ public class Schema {
 
         var fields = resource.getDeclaredFields();
         for (Field field : fields) {
-            var propertySchema = field.getAnnotation(io.zmeu.api.annotations.Property.class);
+            var propertySchema = field.getAnnotation(io.kite.api.annotations.Property.class);
             var property = Property.builder();
 
             property.required(propertySchema.optional());
