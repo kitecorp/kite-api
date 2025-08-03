@@ -1,6 +1,6 @@
-package io.zmeu.api.schema;
+package io.kite.api.schema;
 
-import io.zmeu.api.annotations.Schema;
+import io.kite.api.annotations.Schema;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -10,7 +10,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import java.util.Set;
 
-@SupportedAnnotationTypes("io.zmeu.Schema")
+@SupportedAnnotationTypes("io.kite.Schema")
 @SupportedSourceVersion(SourceVersion.RELEASE_17)
 public class SchemaProcessor extends AbstractProcessor {
 

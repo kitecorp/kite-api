@@ -1,4 +1,4 @@
-package io.zmeu.api.resource;
+package io.kite.api.resource;
 
 import lombok.Builder;
 

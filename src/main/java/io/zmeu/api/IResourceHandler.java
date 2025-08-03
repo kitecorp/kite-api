@@ -1,4 +1,4 @@
-package io.zmeu.api;
+package io.kite.api;
 
 import org.pf4j.ExtensionPoint;
 
