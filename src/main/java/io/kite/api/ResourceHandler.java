@@ -33,6 +33,10 @@ public abstract class ResourceHandler<T> implements IResourceHandler<T> {
     @Getter
     private final Class<T> resource;
 
+    /**
+     * we don't need to store this list in the database for each resource because it's a waste of space.
+     * We know from the schema which properties are immutable and here we just store a reverse index on them
+     */
     private final Set<String> immutableProperties = new HashSet<>();
 
     public ResourceHandler() {
