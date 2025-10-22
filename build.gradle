@@ -7,7 +7,7 @@ repositories {
     mavenCentral()
 }
 version = "0.0.1"
-def lombok = "1.18.36"
+def lombok = "1.18.42"
 dependencies {
     compileOnlyApi("org.pf4j:pf4j:3.13.0")
     implementation 'org.apache.commons:commons-lang3:3.17.0'
