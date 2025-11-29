@@ -1,8 +1,8 @@
 open module kite.api {
-    exports io.kite.api;
-    exports io.kite.api.schema;
-    exports io.kite.api.resource;
-    exports io.kite.api.annotations;
+    exports cloud.kitelang.api;
+    exports cloud.kitelang.api.schema;
+    exports cloud.kitelang.api.resource;
+    exports cloud.kitelang.api.annotations;
 
     requires java.logging;
     requires static lombok;
