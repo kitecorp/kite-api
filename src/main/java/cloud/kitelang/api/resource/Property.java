@@ -11,7 +11,7 @@ public record Property(
         String description,
         String deprecationMessage,
         boolean required,
-        boolean cloud,
+        boolean output,
         boolean importable,
         boolean hidden) {
 
