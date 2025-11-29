@@ -17,7 +17,7 @@ public @interface Property {
 
     boolean optional() default true;
 
-    boolean cloud() default false;
+    boolean output() default false;
 
     boolean importable() default false;
 

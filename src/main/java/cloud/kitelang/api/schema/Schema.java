@@ -34,8 +34,8 @@ public class Schema {
             var property = field.getAnnotation(cloud.kitelang.api.annotations.Property.class);
             var name = property.name().isBlank() ? field.getName() : property.name();
             properties.append("\t");
-            if (property.cloud()) {
-                properties.append("@cloud ");
+            if (property.output()) {
+                properties.append("output ");
             }
             if (property.importable()) {
                 properties.append("(importable) \n");
@@ -73,7 +73,7 @@ public class Schema {
             property.required(propertySchema.optional());
             property.type(field.getType().getSimpleName().toLowerCase());
 
-            property.cloud(propertySchema.cloud());
+            property.output(propertySchema.output());
             property.importable(propertySchema.importable());
             property.description(propertySchema.description());
 
