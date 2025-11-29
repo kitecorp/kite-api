@@ -17,7 +17,7 @@ public @interface Property {
 
     boolean optional() default true;
 
-    boolean output() default false;
+    PropertyKind kind() default PropertyKind.REGULAR;
 
     boolean importable() default false;
 

@@ -29,24 +29,27 @@ public class Schema {
 
     public static String toString(Class<?> resource) {
         var fields = resource.getDeclaredFields();
-        var properties = new StringBuilder(" { \n");
+        var properties = new StringBuilder(" {\n");
         for (Field field : fields) {
             var property = field.getAnnotation(cloud.kitelang.api.annotations.Property.class);
             var name = property.name().isBlank() ? field.getName() : property.name();
             properties.append("\t");
-            if (property.output()) {
-                properties.append("output ");
-            }
-            if (property.importable()) {
-                properties.append("(importable) \n");
+            // Property kind: input, output, or regular (no prefix)
+            switch (property.kind()) {
+                case INPUT -> properties.append("input ");
+                case OUTPUT -> properties.append("output ");
+                case REGULAR -> {} // no prefix
             }
             var typename = field.getType().getSimpleName().toLowerCase();
             properties.append(typename);
             properties.append(" ");
             properties.append(name);
+            if (property.importable()) {
+                properties.append(" // importable");
+            }
             properties.append("\n");
         }
-        properties.append("} \n");
+        properties.append("}\n");
 
         var annotation = resource.getAnnotation(cloud.kitelang.api.annotations.TypeName.class);
         return "schema %s%s".formatted(annotation.value(), properties);
@@ -73,7 +76,7 @@ public class Schema {
             property.required(propertySchema.optional());
             property.type(field.getType().getSimpleName().toLowerCase());
 
-            property.output(propertySchema.output());
+            property.kind(propertySchema.kind());
             property.importable(propertySchema.importable());
             property.description(propertySchema.description());
 

@@ -57,7 +57,7 @@ public abstract class ResourceHandler<T> implements IResourceHandler<T> {
 
     private void initImmutables(Schema definition) {
         for (Property property : definition.getProperties()) {
-            if (property.output()) {
+            if (property.isOutput()) {
                 immutableProperties.add(property.name());
             }
         }
