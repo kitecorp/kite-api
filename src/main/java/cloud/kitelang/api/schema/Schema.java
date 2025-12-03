@@ -73,7 +73,6 @@ public class Schema {
             var propertySchema = field.getAnnotation(cloud.kitelang.api.annotations.Property.class);
             var property = Property.builder();
 
-            property.required(propertySchema.optional());
             property.type(field.getType().getSimpleName().toLowerCase());
 
             property.kind(propertySchema.kind());
