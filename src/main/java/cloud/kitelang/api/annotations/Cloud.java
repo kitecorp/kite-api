@@ -1,24 +1,15 @@
 package cloud.kitelang.api.annotations;
 
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Marks a property as cloud-managed (read-only, set by the cloud provider).
+ * In Kite schema syntax, this generates the @cloud decorator.
+ */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Property {
-    String name() default "";
-
-    String description() default "";
-
-    String deprecationMessage() default "";
-
-    boolean optional() default true;
-
-    boolean importable() default false;
-
-    boolean hidden() default false;
-
+public @interface Cloud {
 }

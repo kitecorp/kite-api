@@ -1,5 +1,6 @@
 package cloud.kitelang.api.schema;
 
+import cloud.kitelang.api.annotations.Cloud;
 import cloud.kitelang.api.annotations.TypeName;
 import cloud.kitelang.api.resource.Property;
 import lombok.Builder;
@@ -27,19 +28,23 @@ public class Schema {
 
     private Set<Property> properties;
 
+    /**
+     * Generates Kite schema definition string from a Java resource class.
+     * Uses @cloud decorator for cloud-managed properties (immutable/read-only from cloud).
+     */
     public static String toString(Class<?> resource) {
         var fields = resource.getDeclaredFields();
         var properties = new StringBuilder(" {\n");
         for (Field field : fields) {
             var property = field.getAnnotation(cloud.kitelang.api.annotations.Property.class);
             var name = property.name().isBlank() ? field.getName() : property.name();
+
             properties.append("\t");
-            // Property kind: input, output, or regular (no prefix)
-            switch (property.kind()) {
-                case INPUT -> properties.append("input ");
-                case OUTPUT -> properties.append("output ");
-                case REGULAR -> {} // no prefix
+            // Use @cloud decorator for cloud-managed properties
+            if (field.isAnnotationPresent(Cloud.class)) {
+                properties.append("@cloud ");
             }
+
             var typename = field.getType().getSimpleName().toLowerCase();
             properties.append(typename);
             properties.append(" ");
@@ -75,7 +80,7 @@ public class Schema {
 
             property.type(field.getType().getSimpleName().toLowerCase());
 
-            property.kind(propertySchema.kind());
+            property.cloud(field.isAnnotationPresent(Cloud.class));
             property.importable(propertySchema.importable());
             property.description(propertySchema.description());
 

@@ -1,8 +1,10 @@
 package cloud.kitelang.api.resource;
 
-import cloud.kitelang.api.annotations.PropertyKind;
 import lombok.Builder;
 
+/**
+ * Represents a schema property definition.
+ */
 @Builder
 public record Property(
         String name,
@@ -10,19 +12,14 @@ public record Property(
         Object value,
         String description,
         String deprecationMessage,
-        PropertyKind kind,
+        boolean cloud,
         boolean importable,
         boolean hidden) {
 
-    public boolean isInput() {
-        return kind == PropertyKind.INPUT;
-    }
-
-    public boolean isOutput() {
-        return kind == PropertyKind.OUTPUT;
-    }
-
-    public boolean isRegular() {
-        return kind == PropertyKind.REGULAR;
+    /**
+     * @return true if this is a cloud-managed property (read-only, set by cloud provider)
+     */
+    public boolean isCloud() {
+        return cloud;
     }
 }
