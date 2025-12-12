@@ -39,9 +39,37 @@ public abstract class ResourceHandler<T> implements IResourceHandler<T> {
      */
     private final Set<String> immutableProperties = new HashSet<>();
 
+    /**
+     * Create a ResourceHandler with auto-inferred generic type.
+     */
     public ResourceHandler() {
         this.resource = (Class<T>) resolveGenericParameter(getClass());
         schemasMap();
+    }
+
+    /**
+     * Create a ResourceHandler with an explicit resource class.
+     * Use this when the generic type cannot be inferred (e.g., for adapters).
+     *
+     * @param resourceClass The resource class
+     */
+    protected ResourceHandler(Class<T> resourceClass) {
+        this.resource = resourceClass;
+        schemasMap();
+    }
+
+    /**
+     * Create a ResourceHandler with an explicit resource class, optionally skipping schema initialization.
+     * Use this for adapters (like gRPC) where schema comes from external sources.
+     *
+     * @param resourceClass The resource class
+     * @param skipSchemaInit If true, skip schema initialization (for adapters)
+     */
+    protected ResourceHandler(Class<T> resourceClass, boolean skipSchemaInit) {
+        this.resource = resourceClass;
+        if (!skipSchemaInit) {
+            schemasMap();
+        }
     }
 
     public Schema schema() {
