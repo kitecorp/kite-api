@@ -56,7 +56,7 @@ public class Schema {
         }
         properties.append("}\n");
 
-        var annotation = resource.getAnnotation(cloud.kitelang.api.annotations.TypeName.class);
+        var annotation = resource.getAnnotation(TypeName.class);
         return "schema %s%s".formatted(annotation.value(), properties);
     }
 
@@ -64,7 +64,7 @@ public class Schema {
     public static Schema toSchema(Class<?> resource) {
         Objects.requireNonNull(resource);
         var builder = Schema.builder();
-        var schemaDefinition = resource.getAnnotation(cloud.kitelang.api.annotations.TypeName.class);
+        var schemaDefinition = resource.getAnnotation(TypeName.class);
         if (schemaDefinition == null) {
             throw new RuntimeException("@SchemaDefinition annotation not found on class: "+resource.getName());
         }

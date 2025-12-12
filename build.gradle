@@ -36,3 +36,9 @@ dependencies {
 extraJavaModuleInfo {
     automaticModule('org.javers:javers-core', 'javers.core')
 }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
