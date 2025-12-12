@@ -9,6 +9,7 @@ import lombok.Builder;
 public record Property(
         String name,
         Object type,
+        Class<?> typeClass,  // The actual Java class for this property's type
         Object value,
         String description,
         String deprecationMessage,

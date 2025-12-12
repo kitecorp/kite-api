@@ -79,6 +79,7 @@ public class Schema {
             var property = Property.builder();
 
             property.type(field.getType().getSimpleName().toLowerCase());
+            property.typeClass(field.getType());  // Store actual class for struct detection
 
             property.cloud(field.isAnnotationPresent(Cloud.class));
             property.importable(propertySchema.importable());
