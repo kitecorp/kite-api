@@ -9,6 +9,13 @@ publishing {
     publications {
         maven(MavenPublication) {
             from components.java
+            artifactId = 'kite-api'
+
+            pom {
+                name = 'Kite API'
+                description = 'Core API interfaces for Kite infrastructure providers'
+                url = 'https://github.com/kitecorp/kite-api'
+            }
         }
     }
 }
