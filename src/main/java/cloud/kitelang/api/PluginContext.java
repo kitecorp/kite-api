@@ -1,8 +1,13 @@
 package cloud.kitelang.api;
 
-import org.pf4j.RuntimeMode;
-
+/**
+ * Context information for plugins.
+ */
 public class PluginContext {
+
+    public enum RuntimeMode {
+        DEVELOPMENT, DEPLOYMENT
+    }
 
     private final RuntimeMode runtimeMode;
 
@@ -13,5 +18,4 @@ public class PluginContext {
     public RuntimeMode getRuntimeMode() {
         return runtimeMode;
     }
-
 }

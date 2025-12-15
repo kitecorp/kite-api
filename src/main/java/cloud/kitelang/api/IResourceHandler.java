@@ -1,11 +1,9 @@
 package cloud.kitelang.api;
 
-import org.pf4j.ExtensionPoint;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public interface IResourceHandler<T> extends ExtensionPoint {
+public interface IResourceHandler<T> {
     T create(T resource);
 
     T read(T resource);

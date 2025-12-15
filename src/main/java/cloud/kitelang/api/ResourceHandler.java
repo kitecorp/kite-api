@@ -18,7 +18,6 @@ package cloud.kitelang.api;
 import cloud.kitelang.api.resource.Property;
 import cloud.kitelang.api.schema.Schema;
 import lombok.Getter;
-import org.pf4j.Extension;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -27,7 +26,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-@Extension
 public abstract class ResourceHandler<T> implements IResourceHandler<T> {
     private final Map<String, Class<?>> schemaMap = new HashMap<>();
     @Getter
