@@ -148,4 +148,21 @@ public @interface Property {
      * @return true if hidden from schema
      */
     boolean hidden() default false;
+
+    /**
+     * Valid values for this property (string enum).
+     *
+     * <p>Use for properties with a fixed set of allowed values.
+     * Enables validation and improved documentation:</p>
+     * <pre>{@code
+     * @Property(validValues = {"default", "dedicated", "host"})
+     * private String instanceTenancy;
+     *
+     * @Property(validValues = {"gp2", "gp3", "io1", "io2", "st1", "sc1"})
+     * private String volumeType;
+     * }</pre>
+     *
+     * @return array of valid values, or empty if any value is allowed
+     */
+    String[] validValues() default {};
 }
