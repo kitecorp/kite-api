@@ -73,6 +73,16 @@ public class Schema {
         builder.properties(new LinkedHashSet<>());
         builder.resourceClass(resource);
 
+        // Create instance to read default field values
+        Object defaultInstance = null;
+        try {
+            var noArgConstructor = resource.getDeclaredConstructor();
+            noArgConstructor.setAccessible(true);
+            defaultInstance = noArgConstructor.newInstance();
+        } catch (Exception ignored) {
+            // No default instance available, defaults will be null
+        }
+
         var fields = resource.getDeclaredFields();
         for (Field field : fields) {
             var propertySchema = field.getAnnotation(cloud.kitelang.api.annotations.Property.class);
@@ -89,6 +99,25 @@ public class Schema {
             property.name(name);
 
             property.hidden(propertySchema.hidden());
+
+            // Extract validValues from annotation
+            var validValues = propertySchema.validValues();
+            if (validValues.length > 0) {
+                property.validValues(List.of(validValues));
+            }
+
+            // Extract default value from field initialization
+            if (defaultInstance != null) {
+                try {
+                    field.setAccessible(true);
+                    var defaultValue = field.get(defaultInstance);
+                    if (defaultValue != null) {
+                        property.defaultValue(String.valueOf(defaultValue));
+                    }
+                } catch (Exception ignored) {
+                    // Could not read default value
+                }
+            }
 
             builder.properties.add(property.build());
         }

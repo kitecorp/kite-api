@@ -2,6 +2,8 @@ package cloud.kitelang.api.resource;
 
 import lombok.Builder;
 
+import java.util.List;
+
 /**
  * Represents a schema property definition.
  */
@@ -15,7 +17,9 @@ public record Property(
         String deprecationMessage,
         boolean cloud,
         boolean importable,
-        boolean hidden) {
+        boolean hidden,
+        String defaultValue,          // Default value as string (from field initialization)
+        List<String> validValues) {   // Valid values for string enum properties
 
     /**
      * @return true if this is a cloud-managed property (read-only, set by cloud provider)
