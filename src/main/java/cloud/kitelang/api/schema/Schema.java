@@ -41,17 +41,19 @@ public class Schema {
 
             properties.append("\t");
             // Use @cloud decorator for cloud-managed properties
-            if (field.isAnnotationPresent(Cloud.class)) {
-                properties.append("@cloud ");
+            var cloudAnnotation = field.getAnnotation(Cloud.class);
+            if (cloudAnnotation != null) {
+                if (cloudAnnotation.importable()) {
+                    properties.append("@cloud(importable) ");
+                } else {
+                    properties.append("@cloud ");
+                }
             }
 
             var typename = field.getType().getSimpleName().toLowerCase();
             properties.append(typename);
             properties.append(" ");
             properties.append(name);
-            if (property.importable()) {
-                properties.append(" // importable");
-            }
             properties.append("\n");
         }
         properties.append("}\n");
@@ -91,8 +93,10 @@ public class Schema {
             property.type(field.getType().getSimpleName().toLowerCase());
             property.typeClass(field.getType());  // Store actual class for struct detection
 
-            property.cloud(field.isAnnotationPresent(Cloud.class));
-            property.importable(propertySchema.importable());
+            var cloudAnnotation = field.getAnnotation(Cloud.class);
+            property.cloud(cloudAnnotation != null);
+            // importable comes from @Cloud annotation (for cloud-managed importable properties)
+            property.importable(cloudAnnotation != null && cloudAnnotation.importable());
             property.description(propertySchema.description());
 
             String name = propertySchema.name().isBlank() ? field.getName() : propertySchema.name();
