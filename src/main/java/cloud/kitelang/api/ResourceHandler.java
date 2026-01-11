@@ -93,6 +93,21 @@ public abstract class ResourceHandler<T> implements IResourceHandler<T> {
         return immutableProperties.contains(name);
     }
 
+    /**
+     * Get the default value for a property from the schema.
+     * @param name Property name
+     * @return Default value as string, or null if no default
+     */
+    public String getDefaultValue(String name) {
+        var schema = schema();
+        if (schema == null) return null;
+        return schema.getProperties().stream()
+                .filter(p -> p.name().equals(name))
+                .findFirst()
+                .map(Property::defaultValue)
+                .orElse(null);
+    }
+
     public Class<?> getSchema(String name) {
         return schemaMap.get(name);
     }
