@@ -38,7 +38,7 @@ import java.lang.annotation.Target;
  *
  * <h2>Auto-Discovery</h2>
  * <p>Classes with {@code @TypeName} are automatically discovered by
- * {@link cloud.kitelang.provider.KiteProvider#discoverResources()}:</p>
+ * {@code KiteProvider#discoverResources()} in kite-provider-sdk:</p>
  * <pre>{@code
  * public class AwsProvider extends KiteProvider {
  *     public AwsProvider() {

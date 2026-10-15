@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'java-library'
     id 'maven-publish'
+    // Applied at the end of this file, and only when this repository is built on its own
+    id 'org.jreleaser' version '1.23.0' apply false
 }
 
 publishing {
@@ -10,11 +12,38 @@ publishing {
             from components.java
             artifactId = 'kite-api'
 
+            // Maven Central refuses a POM without name, description, url, licenses, developers and scm
             pom {
                 name = 'Kite API'
                 description = 'Core API interfaces for Kite infrastructure providers'
                 url = 'https://github.com/kitecorp/kite-api'
+                licenses {
+                    license {
+                        name = 'Apache License 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'kitecorp'
+                        name = 'Kite Team'
+                        url = 'https://github.com/kitecorp'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/kitecorp/kite-api.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/kitecorp/kite-api.git'
+                    url = 'https://github.com/kitecorp/kite-api'
+                }
             }
+        }
+    }
+
+    repositories {
+        // The publish workflow stages the release here, and JReleaser uploads it from here
+        maven {
+            name = 'stagingDeploy'
+            url = layout.buildDirectory.dir('staging-deploy')
         }
     }
 }
@@ -39,5 +68,47 @@ dependencies {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(25))
+    }
+    // Maven Central refuses a jar without its sources and javadoc jars
+    withSourcesJar()
+    withJavadocJar()
+}
+
+// JReleaser signs and checksums the staged files and uploads them to Maven Central through the
+// Central Portal. Only the publish workflow uses it, and that builds this repository on its own.
+// In a multi-project build (the kite superproject, or the SDK build in kite-providers) each project
+// that applies JReleaser loads its own copy of it, and two copies fail the build with
+// "Banner$Inject_ cannot be cast to Banner".
+if (project == rootProject) {
+    apply plugin: 'org.jreleaser'
+
+    jreleaser {
+        signing {
+            active = 'ALWAYS'
+            armored = true
+            mode = 'MEMORY'  // the key comes from the JRELEASER_GPG_* environment variables
+        }
+        deploy {
+            maven {
+                mavenCentral {
+                    sonatype {
+                        active = 'ALWAYS'
+                        url = 'https://central.sonatype.com/api/v1/publisher'
+                        stagingRepository('build/staging-deploy')
+                        // Also checks each POM, and that the sources and javadoc jars are staged,
+                        // against Maven Central's rules before anything is uploaded
+                        applyMavenCentralRules = true
+                        retryDelay = 30
+                        maxRetries = 60
+                    }
+                }
+            }
+        }
+    }
+
+    tasks.named('jreleaserDeploy') {
+        dependsOn 'publishAllPublicationsToStagingDeployRepository'
+        // JReleaser reads the project while the task runs, which the configuration cache refuses
+        notCompatibleWithConfigurationCache('JReleaser reads Task.project at execution time')
     }
 }
