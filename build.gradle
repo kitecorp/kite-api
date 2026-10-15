@@ -74,6 +74,14 @@ java {
     withJavadocJar()
 }
 
+// Every jar, sources and javadoc included, carries the licence as META-INF/LICENSE: the Apache
+// License asks that anyone who receives a copy of the work also receives the licence (section 4)
+tasks.withType(Jar).configureEach {
+    from(layout.projectDirectory.file('LICENSE')) {
+        into 'META-INF'
+    }
+}
+
 // JReleaser signs and checksums the staged files and uploads them to Maven Central through the
 // Central Portal. Only the publish workflow uses it, and that builds this repository on its own.
 // In a multi-project build (the kite superproject, or the SDK build in kite-providers) each project
