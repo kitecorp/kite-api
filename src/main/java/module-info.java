@@ -7,5 +7,4 @@ open module kite.api {
     requires java.logging;
     requires static lombok;
     requires java.compiler;
-    requires org.apache.commons.lang3;
 }
