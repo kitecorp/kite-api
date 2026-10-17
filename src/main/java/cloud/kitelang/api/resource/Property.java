@@ -19,6 +19,10 @@ public record Property(
         boolean importable,
         boolean hidden,
         boolean sensitive,            // Value must be masked in rendered output (plans, logs)
+        // Must be set by the user (@Property(optional = false)). It is "required" and not
+        // "optional" because a builder that never sets it gets false, and false must mean
+        // optional: schemas built without annotations, like the terraform bridge's, do not set it.
+        boolean required,
         String defaultValue,          // Default value as string (from field initialization)
         List<String> validValues) {   // Valid values for string enum properties
 

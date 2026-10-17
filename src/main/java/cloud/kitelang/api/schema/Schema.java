@@ -103,6 +103,7 @@ public class Schema {
             property.name(name);
 
             property.hidden(propertySchema.hidden());
+            property.required(!propertySchema.optional());
 
             // Extract validValues from annotation
             var validValues = propertySchema.validValues();
